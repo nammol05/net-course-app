@@ -25,4 +25,8 @@ export class AppController {
   getInfo() {
     return this.appService.getInfo();
   }
+
+  gitTest() {
+    return this.appService.gitTest();
+  }
 }

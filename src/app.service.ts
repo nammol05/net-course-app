@@ -22,4 +22,8 @@ export class AppService {
   getInfo(): string {
     return 'Hello, I am Nammon Koedbuathong, I\'m 19 years old'
   }
+
+  gitTest() {
+    return 'Git and GitHub using'
+  }
 }
