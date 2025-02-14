@@ -26,6 +26,7 @@ export class AppController {
     return this.appService.getInfo();
   }
 
+  @Get('/showgit')
   gitTest() {
     return this.appService.gitTest();
   }
