@@ -26,4 +26,6 @@ export class AppService {
   gitTest() {
     return 'Git and GitHub using'
   }
+
+  usePostman() {return 'we use postman'}
 }

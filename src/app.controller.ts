@@ -30,4 +30,9 @@ export class AppController {
   gitTest() {
     return this.appService.gitTest();
   }
+
+  @Get('/usepostman')
+  usePostman() {
+    return this.appService.usePostman();
+  }
 }
