@@ -7,12 +7,18 @@ import { AuthUser } from './entities/auth.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports:[
+  imports: [
+    ConfigModule.forRoot(),
     PassportModule,
-    JwtModule.register({signOptions: { expiresIn: '1d'}}),
-    SequelizeModule.forFeature([AuthUser])],
+    JwtModule.register({
+      secret: process.env.JWT_SECRET_KEY || 'default-secret-key', 
+      signOptions: { expiresIn: '1d' }, 
+    }),
+    SequelizeModule.forFeature([AuthUser]),
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })

@@ -62,4 +62,8 @@ export class InventoryService {
           data: item,
         };
     }
+
+    async getAllItems() {
+        return await this.adminInventoryRepository.findAll(); 
+    }
 }

@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Controller, Get, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -12,28 +13,5 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('/showname')
-  getName(): string {
-    return this.appService.getName();
-  }
-
-  @Get('/myJson')
-  myJSON() {
-    return this.appService.myJSON();
-  }
-
-  @Get('/showinfo')
-  getInfo() {
-    return this.appService.getInfo();
-  }
-
-  @Get('/showgit')
-  gitTest() {
-    return this.appService.gitTest();
-  }
-
-  @Get('/usepostman')
-  usePostman() {
-    return this.appService.usePostman();
-  }
+  
 }

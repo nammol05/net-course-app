@@ -3,16 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    
+    <title>Login Page</title>
+    <script>
+        async function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Assuming response contains a token instead of a username
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("token", data.token); // Save token instead of username
+                    window.location.href = "showname.html"; // Redirect to your desired page
+                } else {
+                    alert(data.message || 'Login failed');
+                }
+            } catch (error) {
+                alert('An error occurred: ' + error.message);
+            }
+        }
+    </script>
 </head>
-<body bgcolor="green">
-    <center>
-        <img src="/images/nammon.JPEG" alt="me" style="width: 300px; height: auto;"> <br>
-        <p>Name: {{ name }}</p>
-        <p>Age: {{ age }}</p>
-        <p>Email: {{ email }}</p>
-        <p>Hobby: {{ hobby }}</p>
-    </center>
+<body>
+    <!-- Modal Section -->
+    <div class="modal">
+        <div class="modal-container">
+            <div class="modal-left">
+                <h1 class="modal-title">Welcome!</h1>
+                <p class="modal-desc">Fanny pack hexagon food truck, street art waistcoat kitsch.</p>
+                <div class="input-block">
+                    <label for="email" class="input-label">Email</label>
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                </div>
+                <div class="input-block">
+                    <label for="password" class="input-label">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="modal-buttons">
+                    <a href="/inventory">Click here to login</a></p>
+                </div>
+                <p class="sign-up">Don't have an account? <a href="/auth/register">Sign up now</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

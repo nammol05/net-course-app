@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthUser } from './auth/entities/auth.entity';
 import { AdminModule } from './admin/admin.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -33,7 +34,7 @@ import { InventoryModule } from './inventory/inventory.module';
       autoLoadModels: true,
       sync: {alter: true},
     }),
-    ProductModule, UtilityModule, UserModule,OrderModule, ChatModule, GlobalHelperModule, CustomerModule, UserinfoModule, AuthModule, AdminModule, InventoryModule],
+    ProductModule, UtilityModule, UserModule,OrderModule, ChatModule, GlobalHelperModule, CustomerModule, UserinfoModule, AuthModule, AdminModule, InventoryModule, CartModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        form {
+            max-width: 300px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        button {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Inventory Management</h2>
+    
+    <!-- Inventory Item Form -->
+    <form id="inventory-form">
+        <input type="text" id="itemName" placeholder="Item Name" required>
+        <input type="number" id="itemQuantity" placeholder="Quantity" required>
+        <input type="number" id="itemId" placeholder="Item ID (for update/delete)">
+        <button type="button" onclick="createItem()">Create Item</button>
+        <button type="button" onclick="updateItem()">Update Item</button>
+        <button type="button" onclick="deleteItem()">Delete Item</button>
+    </form>
+    
+    <!-- Inventory Table -->
+    <h3>Current Inventory</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTable">
+            {{#each items}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.itemname}}</td>
+                    <td>{{this.quantity}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script>
+        async function createItem() {
+            const name = document.getElementById("itemName").value;
+            const quantity = document.getElementById("itemQuantity").value;
+
+            const response = await fetch("/inventory/create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ itemname: name, quantity: quantity })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            location.reload(); // Refresh the page to update the table
+        }
+
+        async function updateItem() {
+            const id = document.getElementById("itemId").value;
+            const name = document.getElementById("itemName").value;
+            const quantity = document.getElementById("itemQuantity").value;
+
+            if (!id) {
+                alert("Please enter an Item ID to update.");
+                return;
+            }
+
+            const response = await fetch(`/inventory/update/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ itemname: name, quantity: quantity })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            location.reload();
+        }
+
+        async function deleteItem() {
+            const id = document.getElementById("itemId").value;
+
+            if (!id) {
+                alert("Please enter an Item ID to delete.");
+                return;
+            }
+
+            const response = await fetch(`/inventory/delete/${id}`, {
+                method: "DELETE"
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
