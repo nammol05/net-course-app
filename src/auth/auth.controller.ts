@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, HttpCode, Body, UseGuards, Request, Get, Render } from '@nestjs/common';
+import { Controller, Post, HttpCode, Body, UseGuards, Request, Get, Render, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -28,12 +28,19 @@ export class AuthController {
   }
 
 
-  // Handle Login Request
   @Post('/login')
-  @HttpCode(201)
+  @HttpCode(200) // Use 200 instead of 201 for login success
   async login(@Body() loginDto: LoginDto) {
-    const { access_token } = await this.authService.login(loginDto);
-    return { message: 'Login complete', access_token };
+    const token = await this.authService.login(loginDto);
+    
+    if (!token || !token.access_token) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+  
+    return {
+      message: 'Login successful',
+      access_token: token.access_token, // Ensure token is returned properly
+    };
   }
 
   // Get User Profile (Protected Route)

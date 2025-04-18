@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common'; //UseGuards
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Customer } from './entities/customer.entity';
+//import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('customer')
 export class CustomerController {
@@ -36,15 +37,16 @@ export class CustomerController {
   }
 
   @Get('/findfullname/:fullname')
-  async findFullname(@Param('fullname') fullname: string) {
-    const findfullname = await this.customerService.findFullname(fullname);
-    if (findfullname == null) {
-      throw new NotFoundException('Not Found Data!!!');
-    }
-    return findfullname;
+async findFullname(@Param('fullname') fullname: string): Promise<Customer> {
+  const findfullname = await this.customerService.findFullname(fullname);
+
+  if (!findfullname) {
+    throw new NotFoundException('Not Found Data!!!');
   }
 
-  @UseGuards(JwtAuthGuard)
+  return findfullname;
+}
+  //@UseGuards(JwtAuthGuard)
   @Delete('/delete/:id')
   async remove(@Param('id') id: string) {
     const destroyCustomer = await this.customerService.remove(+id);

@@ -21,10 +21,12 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Assuming response contains a token instead of a username
+                    // Store the login token
                     localStorage.setItem("loggedIn", "true");
-                    localStorage.setItem("token", data.token); // Save token instead of username
-                    window.location.href = "showname.html"; // Redirect to your desired page
+                    localStorage.setItem("token", data.token); // Store the auth token
+
+                    // Redirect to inventory after login
+                    window.location.href = "/inventory";
                 } else {
                     alert(data.message || 'Login failed');
                 }
@@ -32,6 +34,30 @@
                 alert('An error occurred: ' + error.message);
             }
         }
+
+        // Redirect to login if the user is not logged in when accessing inventory
+        function checkLoginBeforeInventory() {
+            const isLoggedIn = localStorage.getItem("loggedIn");
+            if (!isLoggedIn) {
+                alert("You must log in first!");
+                window.location.href = "/auth/login"; // Redirect to login page
+            }
+        }
+
+        // Run check when trying to access the inventory page
+        document.addEventListener("DOMContentLoaded", function () {
+            const inventoryLink = document.getElementById("inventoryLink");
+            if (inventoryLink) {
+                inventoryLink.addEventListener("click", function (event) {
+                    const isLoggedIn = localStorage.getItem("loggedIn");
+                    if (!isLoggedIn) {
+                        event.preventDefault(); // Prevent navigation
+                        alert("You must log in first!");
+                        window.location.href = "/auth/login"; // Redirect to login page
+                    }
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -50,9 +76,10 @@
                     <input type="password" name="password" id="password" placeholder="Password" required>
                 </div>
                 <div class="modal-buttons">
-                    <a href="/inventory">Click here to login</a></p>
+                    <button class="modal-button" onclick="login()">Click here to login</button>
                 </div>
                 <p class="sign-up">Don't have an account? <a href="/auth/register">Sign up now</a></p>
+                <p><a href="/inventory" id="inventoryLink">Go to Inventory</a></p>
             </div>
         </div>
     </div>

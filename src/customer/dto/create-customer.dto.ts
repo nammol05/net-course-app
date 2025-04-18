@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
 export class CreateCustomerDto {
-    fullname: string;
+    name: string;
     isActive: boolean;
-}
+    position: string;
+    email: string;
+    phone: string;
+  }
