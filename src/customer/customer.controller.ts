@@ -47,7 +47,7 @@ async findFullname(@Param('fullname') fullname: string): Promise<Customer> {
   return findfullname;
 }
   //@UseGuards(JwtAuthGuard)
-  @Delete('/delete/:id')
+  @Delete(':id')
   async remove(@Param('id') id: string) {
     const destroyCustomer = await this.customerService.remove(+id);
     console.log(destroyCustomer);
