@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AdminInventory } from './entities/admin-inventory.entity';
+import { AdminInventory } from './entities/inventory.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateItemDto } from './dto/create-inventory.dto';
 import { UpdateInventoryDto } from './dto/update-inventory.dto';

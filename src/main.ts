@@ -9,7 +9,7 @@ async function bootstrap() {
 
   // Enable CORS for frontend to communicate with backend
   app.enableCors({
-    origin: 'http://localhost:3000', // Change this to your frontend port
+    origin: 'http://localhost:3000', // Change this to frontend port
   });
 
   // Use global validation pipe for incoming requests

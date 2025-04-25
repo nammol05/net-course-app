@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,12 +17,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: secretKey, 
+      secretOrKey: secretKey,
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async validate(payload: { user_id: number }) {
-    return { user_id: payload.user_id };
+  validate(payload: { user_id: number }) {
+    console.log('Decoded Payload:', payload);  // Log the decoded JWT payload for debugging
+    return { user_id: payload.user_id };  // Returning the user_id from the decoded JWT token
   }
 }

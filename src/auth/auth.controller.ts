@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, HttpCode, Body, UseGuards, Request, Get, Render, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, HttpCode, Body, UseGuards, Request, Get, Render, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -20,33 +20,54 @@ export class AuthController {
   @HttpCode(201)
   async register(@Body() registerDto: RegisterDto) {
     try {
-      await this.authService.register(registerDto);
-      return { message: 'Registration successful! You can now log in.' };
+      const newUser = await this.authService.register(registerDto);
+      return {
+        message: 'Registration successful! You can now log in.',
+        user: {
+          id: newUser.id,
+          username: newUser.username,
+          email: newUser.email,
+        },
+      };
     } catch (error) {
-      return { message: 'An error occurred during registration. Please try again.' };
+      // Explicitly handle the error for the registration process
+      if (error.response && error.response.message) {
+        throw new BadRequestException(error.response.message);
+      }
+      throw new BadRequestException('An error occurred during registration. Please try again.');
     }
   }
 
-
+  // Login Request
   @Post('/login')
   @HttpCode(200) // Use 200 instead of 201 for login success
   async login(@Body() loginDto: LoginDto) {
-    const token = await this.authService.login(loginDto);
-    
-    if (!token || !token.access_token) {
+    try {
+      const token = await this.authService.login(loginDto);
+      if (!token || !token.access_token) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      return {
+        message: 'Login successful',
+        access_token: token.access_token, // Ensure token is returned properly
+      };
+    } catch (error) {
       throw new UnauthorizedException('Invalid credentials');
     }
-  
-    return {
-      message: 'Login successful',
-      access_token: token.access_token, // Ensure token is returned properly
-    };
   }
 
   // Get User Profile (Protected Route)
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   async getProfile(@Request() req: any) {
-    return await this.authService.getUsertProfile(Number(req.user.user_id));
+    try {
+      const profile = await this.authService.getUserProfile(Number(req.user.user_id));
+      if (!profile) {
+        throw new UnauthorizedException('User not found');
+      }
+      return profile;
+    } catch (error) {
+      throw new UnauthorizedException('Failed to fetch user profile');
+    }
   }
 }

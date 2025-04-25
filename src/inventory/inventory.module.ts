@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { InventoryController } from './inventory.controller';
-import { InventoryService } from './inventory.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AdminInventory } from './entities/admin-inventory.entity';
+import { AdminInventory } from './entities/inventory.entity'; 
+import { InventoryService } from './inventory.service';
+import { InventoryController } from './inventory.controller';
 
 @Module({
   imports: [SequelizeModule.forFeature([AdminInventory])],
   controllers: [InventoryController],
   providers: [InventoryService],
-  exports: [InventoryService],
+  exports: [SequelizeModule], 
 })
 export class InventoryModule {}

@@ -17,4 +17,11 @@ export class AdminInventory extends Model {
 
   @Column({ allowNull: false, type: DataType.TEXT })
   descrip: string; 
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  thumbnail: string;
 }
+

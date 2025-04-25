@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChatController } from './chat.controller';
+import { MusicController } from './music.controller';
 
-describe('ChatController', () => {
-  let controller: ChatController;
+describe('MusicController', () => {
+  let controller: MusicController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ChatController],
+      controllers: [MusicController],
     }).compile();
 
-    controller = module.get<ChatController>(ChatController);
+    controller = module.get<MusicController>(MusicController);
   });
 
   it('should be defined', () => {
